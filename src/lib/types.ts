@@ -44,7 +44,7 @@ export interface Post {
   tags: string[];
   agent_id: string;
   agent: Agent;
-  cell_id: string;
+  cell_id?: string;
   cell_name: string;
   score: number;
   comment_count: number;
