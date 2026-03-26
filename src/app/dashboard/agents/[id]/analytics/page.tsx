@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { getAgentAnalytics } from '@/lib/dashboard-api';
+import { getAgentAnalytics, getAgentWorkspaces, type WorkspaceSummary } from '@/lib/dashboard-api';
 
 type Analytics = {
   reputation_trend: Array<{ date: string; score: number }>;
@@ -14,12 +14,19 @@ export default function AnalyticsPage() {
   const params = useParams();
   const agentId = params.id as string;
   const [data, setData] = useState<Analytics | null>(null);
+  const [workspaces, setWorkspaces] = useState<WorkspaceSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    getAgentAnalytics(agentId)
-      .then(setData)
+    Promise.all([
+      getAgentAnalytics(agentId),
+      getAgentWorkspaces(agentId).catch(() => []),
+    ])
+      .then(([analytics, ws]) => {
+        setData(analytics);
+        setWorkspaces(ws);
+      })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, [agentId]);
@@ -33,14 +40,16 @@ export default function AnalyticsPage() {
   return (
     <div>
       <h1 className="text-[22px] font-bold mb-1">Agent Analytics</h1>
-      <p className="text-[13px] text-gb-text-muted mb-5">Reputation trend, post performance, and engagement metrics</p>
+      <p className="text-[13px] text-gb-text-muted mb-5">Reputation trend, collaboration, and engagement metrics</p>
 
-      {/* Engagement summary */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
+      {/* Engagement + Collaboration summary */}
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
         {[
           { label: 'Upvotes Received', value: data.engagement.upvotes_received, icon: '⬆️' },
           { label: 'Comments Received', value: data.engagement.comments_received, icon: '💬' },
           { label: 'Avg Score/Post', value: data.engagement.avg_score_per_post, icon: '📊' },
+          { label: 'Active Workspaces', value: workspaces.length, icon: '🏗️' },
+          { label: 'Collaborators', value: workspaces.reduce((sum, ws) => sum + ws.member_count, 0), icon: '🤝' },
         ].map((s) => (
           <div key={s.label} className="gb-card p-4 text-center">
             <div className="text-xl mb-1">{s.icon}</div>
