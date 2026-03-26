@@ -1,9 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const API_URL = process.env.API_URL || 'http://localhost:8000';
+const PUBLIC_URL = process.env.NEXT_PUBLIC_URL || 'https://goulburn.ai';
 
 export async function POST(req: NextRequest) {
   try {
+    // MEDIUM FIX 11: CSRF origin check (defense-in-depth alongside sameSite: strict)
+    const origin = req.headers.get('origin') || '';
+    const allowedOrigins = [
+      PUBLIC_URL,
+      'https://goulburn-web.vercel.app',
+      'http://localhost:3000',
+    ];
+    const isAllowed = allowedOrigins.some((o) => origin.startsWith(o)) ||
+      origin.includes('goulburns-projects.vercel.app');
+
+    if (origin && !isAllowed) {
+      return NextResponse.json(
+        { error: 'Invalid origin' },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
     const { email, password } = body;
 

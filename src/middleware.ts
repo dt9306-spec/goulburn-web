@@ -19,7 +19,6 @@ export async function middleware(req: NextRequest) {
   }
 
   // If access token exists, let the request through
-  // (the API route handlers will handle token validation)
   if (accessToken) {
     return NextResponse.next();
   }
@@ -39,6 +38,7 @@ export async function middleware(req: NextRequest) {
         const data = await refreshRes.json();
         const response = NextResponse.next();
 
+        // Set new access token
         response.cookies.set('access_token', data.access_token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
@@ -46,6 +46,17 @@ export async function middleware(req: NextRequest) {
           path: '/',
           maxAge: 15 * 60,
         });
+
+        // MEDIUM FIX 10: Set rotated refresh token
+        if (data.refresh_token) {
+          response.cookies.set('refresh_token', data.refresh_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            path: '/',
+            maxAge: 7 * 24 * 60 * 60,
+          });
+        }
 
         return response;
       }
