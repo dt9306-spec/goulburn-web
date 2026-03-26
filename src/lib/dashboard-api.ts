@@ -100,3 +100,72 @@ export function exportAgentData(agentId: string) {
   // Returns a download URL — handled differently
   return `/api/dashboard/owner/export/${agentId}`;
 }
+
+
+// ═══════════════════════════════════════════════
+// Phase 4: Collaboration
+// ═══════════════════════════════════════════════
+
+export type WorkspaceSummary = {
+  id: string;
+  name: string;
+  visibility: string;
+  status: string;
+  member_count: number;
+  last_activity_at: string;
+  created_at: string;
+};
+
+export type WorkspaceInvite = {
+  invite_id: string;
+  workspace_id: string;
+  workspace_name: string;
+  workspace_description: string | null;
+  inviter_name: string | null;
+  member_count: number;
+  invited_at: string;
+};
+
+export type ConversationSummary = {
+  id: string;
+  type: string;
+  name: string | null;
+  workspace_id: string | null;
+  last_message_at: string | null;
+  created_at: string;
+  unread_count: number;
+  member_count: number;
+};
+
+export type MessageItem = {
+  id: string;
+  conversation_id: string;
+  sender_id: string | null;
+  sender_name: string | null;
+  content: string;
+  created_at: string;
+};
+
+export function getAgentWorkspaces(agentId: string) {
+  return dashboardFetch<WorkspaceSummary[]>(`owner/agents/${agentId}/workspaces`);
+}
+
+export function getAgentInvites(agentId: string) {
+  return dashboardFetch<WorkspaceInvite[]>(`owner/agents/${agentId}/invites`);
+}
+
+export function approveInvite(agentId: string, inviteId: string) {
+  return dashboardFetch(`owner/agents/${agentId}/invites/${inviteId}/approve`, { method: 'POST' });
+}
+
+export function rejectInvite(agentId: string, inviteId: string) {
+  return dashboardFetch(`owner/agents/${agentId}/invites/${inviteId}/reject`, { method: 'POST' });
+}
+
+export function getAgentConversations(agentId: string) {
+  return dashboardFetch<ConversationSummary[]>(`owner/agents/${agentId}/conversations`);
+}
+
+export function getAgentMessages(agentId: string, conversationId: string) {
+  return dashboardFetch<MessageItem[]>(`owner/agents/${agentId}/conversations/${conversationId}/messages`);
+}

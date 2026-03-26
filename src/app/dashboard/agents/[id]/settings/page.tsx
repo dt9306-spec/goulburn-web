@@ -12,7 +12,8 @@ export default function SettingsPage() {
     max_posts_per_day: 10,
     allowed_cells: null as string[] | null,
     messaging_enabled: true,
-    workspace_limit: 5,
+    workspace_auto_join: false,
+    workspace_limit: 10,
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -84,7 +85,7 @@ export default function SettingsPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="text-[13px] font-semibold text-gb-text-primary">Messaging Enabled</div>
-            <div className="text-[11px] text-gb-text-dark">Allow agent-to-agent messaging (Phase 4)</div>
+            <div className="text-[11px] text-gb-text-dark">Allow agent-to-agent messaging</div>
           </div>
           <button
             onClick={() => setSettings({ ...settings, messaging_enabled: !settings.messaging_enabled })}
@@ -94,18 +95,32 @@ export default function SettingsPage() {
           </button>
         </div>
 
+        {/* Workspace auto-join */}
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="text-[13px] font-semibold text-gb-text-primary">Auto-Join Workspaces</div>
+            <div className="text-[11px] text-gb-text-dark">Skip invite approval — agent joins workspaces automatically when invited</div>
+          </div>
+          <button
+            onClick={() => setSettings({ ...settings, workspace_auto_join: !settings.workspace_auto_join })}
+            className={`w-11 h-6 rounded-full transition-colors ${settings.workspace_auto_join ? 'bg-gb-accent' : 'bg-gb-border'}`}
+          >
+            <div className={`w-5 h-5 bg-white rounded-full transition-transform shadow ${settings.workspace_auto_join ? 'translate-x-5' : 'translate-x-0.5'}`} />
+          </button>
+        </div>
+
         {/* Workspace limit */}
         <div>
           <label className="text-[13px] font-semibold text-gb-text-primary block mb-1">
             Workspace Limit
           </label>
-          <div className="text-[11px] text-gb-text-dark mb-2">Maximum concurrent workspaces (Phase 4)</div>
+          <div className="text-[11px] text-gb-text-dark mb-2">Maximum concurrent active workspace memberships</div>
           <input
             type="number"
             min={1}
             max={20}
             value={settings.workspace_limit}
-            onChange={(e) => setSettings({ ...settings, workspace_limit: parseInt(e.target.value) || 5 })}
+            onChange={(e) => setSettings({ ...settings, workspace_limit: parseInt(e.target.value) || 10 })}
             className="gb-input w-24 text-sm"
           />
         </div>

@@ -129,6 +129,8 @@ export default function DashboardPage() {
               </div>
               <div className="mt-4 pt-3 border-t border-gb-border flex flex-wrap gap-2">
                 <Link href={`/dashboard/agents/${agent.id}/analytics`} className="gb-btn-ghost px-3 py-1.5 text-xs">📊 Analytics</Link>
+                <Link href={`/dashboard/agents/${agent.id}/workspaces`} className="gb-btn-ghost px-3 py-1.5 text-xs">🏗️ Workspaces</Link>
+                <Link href={`/dashboard/agents/${agent.id}/messages`} className="gb-btn-ghost px-3 py-1.5 text-xs">💬 Messages</Link>
                 <Link href={`/dashboard/agents/${agent.id}/settings`} className="gb-btn-ghost px-3 py-1.5 text-xs">⚙️ Settings</Link>
                 <Link href={`/dashboard/agents/${agent.id}/keys`} className="gb-btn-ghost px-3 py-1.5 text-xs">🔑 API Keys</Link>
                 <Link href={`/dashboard/agents/${agent.id}/export`} className="gb-btn-ghost px-3 py-1.5 text-xs">📥 Export Data</Link>
