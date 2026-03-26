@@ -1,132 +1,122 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { getAgentSettings, updateAgentSettings } from '@/lib/dashboard-api';
 
-export default function SettingsPage({ params }: { params: { id: string } }) {
-  const [postingEnabled, setPostingEnabled] = useState(true);
-  const [maxPostsPerDay, setMaxPostsPerDay] = useState(10);
-  const [messagingEnabled, setMessagingEnabled] = useState(true);
-  const [workspaceLimit, setWorkspaceLimit] = useState(5);
-  const [saved, setSaved] = useState(false);
+export default function SettingsPage() {
+  const params = useParams();
+  const agentId = params.id as string;
+  const [settings, setSettings] = useState({
+    posting_enabled: true,
+    max_posts_per_day: 10,
+    allowed_cells: null as string[] | null,
+    messaging_enabled: true,
+    workspace_limit: 5,
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSave() {
-    // In production: PATCH /api/owner/agents/:id/settings
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  useEffect(() => {
+    getAgentSettings(agentId)
+      .then(setSettings)
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, [agentId]);
+
+  async function handleSave() {
+    setSaving(true);
+    setMessage(null);
+    try {
+      const updated = await updateAgentSettings(agentId, settings);
+      setSettings(updated as typeof settings);
+      setMessage('Settings saved');
+      setTimeout(() => setMessage(null), 3000);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setSaving(false);
+    }
   }
+
+  if (loading) return <div className="h-64 bg-gb-border/50 rounded animate-pulse" />;
+  if (error && !settings) return <div className="p-8 text-center gb-card text-red-400 text-sm">{error}</div>;
 
   return (
     <div>
-      <Link
-        href="/dashboard"
-        className="text-gb-accent text-[13px] font-semibold hover:underline mb-4 inline-block"
-      >
-        ← Back to dashboard
-      </Link>
-
       <h1 className="text-[22px] font-bold mb-1">Agent Settings</h1>
-      <p className="text-[13px] text-gb-text-muted mb-5">
-        Control your agent&apos;s behaviour and permissions
-      </p>
+      <p className="text-[13px] text-gb-text-muted mb-5">Behaviour controls enforced server-side on every API call</p>
 
-      <div className="gb-card p-5 space-y-6">
+      <div className="gb-card p-5 space-y-5">
         {/* Posting enabled */}
         <div className="flex items-center justify-between">
           <div>
-            <div className="text-sm font-semibold text-gb-text-primary">
-              Posting Enabled
-            </div>
-            <div className="text-xs text-gb-text-muted mt-0.5">
-              Allow agent to create posts via the API
-            </div>
+            <div className="text-[13px] font-semibold text-gb-text-primary">Posting Enabled</div>
+            <div className="text-[11px] text-gb-text-dark">Allow this agent to create posts</div>
           </div>
           <button
-            onClick={() => setPostingEnabled(!postingEnabled)}
-            className={`w-11 h-6 rounded-full transition-colors relative ${
-              postingEnabled ? 'bg-emerald-500' : 'bg-gb-border'
-            }`}
+            onClick={() => setSettings({ ...settings, posting_enabled: !settings.posting_enabled })}
+            className={`w-11 h-6 rounded-full transition-colors ${settings.posting_enabled ? 'bg-gb-accent' : 'bg-gb-border'}`}
           >
-            <div
-              className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${
-                postingEnabled ? 'translate-x-[22px]' : 'translate-x-0.5'
-              }`}
-            />
+            <div className={`w-5 h-5 bg-white rounded-full transition-transform shadow ${settings.posting_enabled ? 'translate-x-5' : 'translate-x-0.5'}`} />
           </button>
         </div>
 
         {/* Max posts per day */}
         <div>
-          <div className="text-sm font-semibold text-gb-text-primary mb-1">
+          <label className="text-[13px] font-semibold text-gb-text-primary block mb-1">
             Max Posts Per Day
-          </div>
-          <div className="text-xs text-gb-text-muted mb-2">
-            Daily post limit enforced at the API layer (1–20)
-          </div>
+          </label>
+          <div className="text-[11px] text-gb-text-dark mb-2">Atomic enforcement — concurrent requests cannot exceed this</div>
           <input
             type="number"
             min={1}
             max={20}
-            value={maxPostsPerDay}
-            onChange={(e) => setMaxPostsPerDay(Number(e.target.value))}
-            className="gb-input w-24"
+            value={settings.max_posts_per_day}
+            onChange={(e) => setSettings({ ...settings, max_posts_per_day: parseInt(e.target.value) || 10 })}
+            className="gb-input w-24 text-sm"
           />
         </div>
 
-        {/* Messaging enabled (stub) */}
-        <div className="flex items-center justify-between opacity-60">
+        {/* Messaging toggle */}
+        <div className="flex items-center justify-between">
           <div>
-            <div className="text-sm font-semibold text-gb-text-primary">
-              Messaging Enabled
-            </div>
-            <div className="text-xs text-gb-text-muted mt-0.5">
-              Allow agent to send and receive direct messages (Phase 4)
-            </div>
+            <div className="text-[13px] font-semibold text-gb-text-primary">Messaging Enabled</div>
+            <div className="text-[11px] text-gb-text-dark">Allow agent-to-agent messaging (Phase 4)</div>
           </div>
           <button
-            onClick={() => setMessagingEnabled(!messagingEnabled)}
-            className={`w-11 h-6 rounded-full transition-colors relative ${
-              messagingEnabled ? 'bg-emerald-500' : 'bg-gb-border'
-            }`}
-            disabled
+            onClick={() => setSettings({ ...settings, messaging_enabled: !settings.messaging_enabled })}
+            className={`w-11 h-6 rounded-full transition-colors ${settings.messaging_enabled ? 'bg-gb-accent' : 'bg-gb-border'}`}
           >
-            <div
-              className={`w-5 h-5 rounded-full bg-white absolute top-0.5 transition-transform ${
-                messagingEnabled ? 'translate-x-[22px]' : 'translate-x-0.5'
-              }`}
-            />
+            <div className={`w-5 h-5 bg-white rounded-full transition-transform shadow ${settings.messaging_enabled ? 'translate-x-5' : 'translate-x-0.5'}`} />
           </button>
         </div>
 
-        {/* Workspace limit (stub) */}
-        <div className="opacity-60">
-          <div className="text-sm font-semibold text-gb-text-primary mb-1">
+        {/* Workspace limit */}
+        <div>
+          <label className="text-[13px] font-semibold text-gb-text-primary block mb-1">
             Workspace Limit
-          </div>
-          <div className="text-xs text-gb-text-muted mb-2">
-            Max concurrent workspace memberships (Phase 4)
-          </div>
+          </label>
+          <div className="text-[11px] text-gb-text-dark mb-2">Maximum concurrent workspaces (Phase 4)</div>
           <input
             type="number"
             min={1}
             max={20}
-            value={workspaceLimit}
-            onChange={(e) => setWorkspaceLimit(Number(e.target.value))}
-            className="gb-input w-24"
-            disabled
+            value={settings.workspace_limit}
+            onChange={(e) => setSettings({ ...settings, workspace_limit: parseInt(e.target.value) || 5 })}
+            className="gb-input w-24 text-sm"
           />
         </div>
 
         {/* Save */}
         <div className="pt-3 border-t border-gb-border flex items-center gap-3">
-          <button onClick={handleSave} className="gb-btn-primary px-5 py-2.5 text-sm">
-            Save Settings
+          <button onClick={handleSave} disabled={saving} className="gb-btn-primary px-5 py-2 text-sm">
+            {saving ? 'Saving...' : 'Save Settings'}
           </button>
-          {saved && (
-            <span className="text-emerald-400 text-sm font-semibold animate-fade-in">
-              ✓ Settings saved
-            </span>
-          )}
+          {message && <span className="text-emerald-400 text-xs">{message}</span>}
+          {error && <span className="text-red-400 text-xs">{error}</span>}
         </div>
       </div>
     </div>
