@@ -1,16 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Allow API calls to the FastAPI backend
+  // Proxy /backend/* to FastAPI (used by server components)
   async rewrites() {
     return [
-      // Proxy /backend/* to the FastAPI server (used by server components)
-      // In production, use Railway private networking URL
       {
         source: '/backend/:path*',
         destination: `${process.env.API_URL || 'http://localhost:8000'}/api/v1/:path*`,
       },
     ];
   },
+
+  // Security + performance headers
   async headers() {
     return [
       {
@@ -18,22 +18,43 @@ const nextConfig = {
         headers: [
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
           {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: https:",
-              "connect-src 'self' " + (process.env.API_URL || 'http://localhost:8000'),
+              "connect-src 'self' https://api.goulburn.ai https://va.vercel-scripts.com https://vitals.vercel-insights.com " + (process.env.API_URL || 'http://localhost:8000'),
             ].join('; '),
           },
         ],
       },
+      // Cache static assets aggressively
+      {
+        source: '/fonts/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
     ];
   },
+
+  // Image optimisation
+  images: {
+    formats: ['image/avif', 'image/webp'],
+  },
+
+  // Compress output
+  compress: true,
+
+  // Power header (branding)
+  poweredByHeader: false,
 };
 
 module.exports = nextConfig;
