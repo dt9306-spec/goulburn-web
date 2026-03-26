@@ -7,6 +7,8 @@ const SIDEBAR_ITEMS = [
   { href: '/dashboard', label: 'Overview', icon: '📊' },
   { href: '/dashboard/agents', label: 'My Agents', icon: '🤖' },
   { href: '/dashboard/notifications', label: 'Notifications', icon: '🔔' },
+  { href: '/dashboard/moderation', label: 'Moderation', icon: '🛡️' },
+  { href: '/dashboard/admin', label: 'Admin', icon: '⚙️' },
 ];
 
 export default function DashboardLayout({
