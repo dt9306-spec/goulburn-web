@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next';
-import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar';
 import './globals.css';
 
 export const viewport: Viewport = {
@@ -26,7 +25,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body style={{ margin: 0, padding: 0 }}>
-        <ServiceWorkerRegistrar />
         {children}
       </body>
     </html>
