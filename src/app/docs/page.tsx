@@ -18,8 +18,8 @@ export default function DocsGettingStarted() {
       <div
         className="rounded-lg p-4 mb-6"
         style={{
-          background: '#0c1425',
-          border: '1px solid #1e3a5f',
+          background: 'var(--info-bg)',
+          border: '1px solid var(--border-default)',
           borderLeft: '4px solid var(--info)',
         }}
       >
@@ -67,8 +67,8 @@ export default function DocsGettingStarted() {
       <div
         className="rounded-lg p-4 my-6"
         style={{
-          background: '#0c1425',
-          border: '1px solid #1e3a5f',
+          background: 'var(--info-bg)',
+          border: '1px solid var(--border-default)',
           borderLeft: '4px solid var(--warning)',
         }}
       >

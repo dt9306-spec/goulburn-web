@@ -5,42 +5,42 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Core palette from prototype
+        // Core palette — light theme with Gold Drop accent
         gb: {
-          bg: '#020617',        // Main background
-          surface: '#0f172a',   // Card / elevated surface
-          border: '#1e293b',    // Borders and dividers
-          'border-hover': '#334155',
-          accent: '#e94560',    // Primary CTA / brand accent
-          'accent-hover': '#c73a52',
-          secondary: '#0f3460', // Secondary blue
-          'secondary-light': '#1e5090',
+          bg: '#ffffff',        // Main background
+          surface: '#f8f9fa',   // Card / elevated surface
+          border: '#e5e7eb',    // Borders and dividers
+          'border-hover': '#d1d5db',
+          accent: '#E98300',    // Primary CTA / brand accent (Gold Drop)
+          'accent-hover': '#d07500',
+          secondary: '#1a1a2e', // Secondary dark
+          'secondary-light': '#2d2d44',
           text: {
-            primary: '#f1f5f9',
-            secondary: '#94a3b8',
-            muted: '#64748b',
-            dark: '#475569',
+            primary: '#1a1a2e',
+            secondary: '#4a4a5a',
+            muted: '#6b7280',
+            dark: '#9ca3af',
           },
           // Reputation colours
           rep: {
-            gold: '#10b981',    // 800+
-            silver: '#f59e0b',  // 500-799
-            bronze: '#3b82f6',  // 200-499
-            iron: '#94a3b8',    // 0-199
+            gold: '#059669',    // 800+
+            silver: '#d97706',  // 500-799
+            bronze: '#2563eb',  // 200-499
+            iron: '#9ca3af',    // 0-199
           },
           // Status colours
           status: {
-            active: '#34d399',
-            'active-bg': '#064e3b',
-            pending: '#f59e0b',
-            'pending-bg': '#78350f',
-            completed: '#94a3b8',
+            active: '#059669',
+            'active-bg': '#ecfdf5',
+            pending: '#d97706',
+            'pending-bg': '#fffbeb',
+            completed: '#9ca3af',
           },
           // Priority colours for task tables
           priority: {
-            critical: '#e94560',
-            high: '#f59e0b',
-            medium: '#3b82f6',
+            critical: '#dc2626',
+            high: '#d97706',
+            medium: '#2563eb',
           },
         },
       },
@@ -52,9 +52,9 @@ const config: Config = {
         '2xs': ['0.625rem', { lineHeight: '1rem' }],
       },
       backgroundImage: {
-        'gradient-accent': 'linear-gradient(135deg, #e94560, #c73a52)',
-        'gradient-secondary': 'linear-gradient(135deg, #0f3460, #1e5090)',
-        'gradient-logo': 'linear-gradient(135deg, #e94560, #0f3460)',
+        'gradient-accent': 'linear-gradient(135deg, #E98300, #d07500)',
+        'gradient-secondary': 'linear-gradient(135deg, #1a1a2e, #2d2d44)',
+        'gradient-logo': 'linear-gradient(135deg, #E98300, #1a1a2e)',
       },
       maxWidth: {
         landing: '960px',

@@ -10,7 +10,7 @@ export default function LandingHeader() {
     <header
       className="sticky top-0 z-50 border-b border-gb-border"
       style={{
-        background: '#020617ee',
+        background: 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
       }}

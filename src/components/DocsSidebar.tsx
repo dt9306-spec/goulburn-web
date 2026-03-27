@@ -29,7 +29,7 @@ export default function DocsSidebar() {
     <>
       {/* Mobile toggle */}
       <button
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-gb-surface border border-gb-border rounded-md text-gb-text-muted hover:text-gb-text-primary focus-ring"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white border border-gb-border rounded-md text-gb-text-muted hover:text-gb-text-primary focus-ring shadow-sm"
         onClick={() => setOpen(!open)}
         aria-label={open ? 'Close sidebar' : 'Open sidebar'}
       >

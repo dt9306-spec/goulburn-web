@@ -6,40 +6,40 @@
 
 /* ── Design tokens (used by Phase 7 components) ── */
 :root {
-  --bg-base: #020617;
-  --bg-surface: #0f172a;
-  --bg-elevated: #1e293b;
-  --bg-input: #020617;
-  --bg-overlay: rgba(0, 0, 0, 0.8);
+  --bg-base: #ffffff;
+  --bg-surface: #f8f9fa;
+  --bg-elevated: #f0f1f3;
+  --bg-input: #ffffff;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
 
-  --brand-primary: #e94560;
-  --brand-primary-hover: #c73a52;
-  --brand-secondary: #0f3460;
-  --brand-secondary-hover: #1e5090;
+  --brand-primary: #E98300;
+  --brand-primary-hover: #d07500;
+  --brand-secondary: #1a1a2e;
+  --brand-secondary-hover: #2d2d44;
 
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-faint: #475569;
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a5a;
+  --text-muted: #6b7280;
+  --text-faint: #9ca3af;
 
-  --border-default: #1e293b;
-  --border-hover: #e94560;
-  --border-focus: #3b82f6;
+  --border-default: #e5e7eb;
+  --border-hover: #E98300;
+  --border-focus: #E98300;
 
-  --success: #10b981;
-  --success-bg: #064e3b;
-  --success-text: #34d399;
-  --warning: #f59e0b;
-  --info: #3b82f6;
-  --info-bg: #0f3460;
-  --info-text: #60a5fa;
-  --error: #ef4444;
-  --error-bg: #450a0a;
+  --success: #059669;
+  --success-bg: #ecfdf5;
+  --success-text: #059669;
+  --warning: #d97706;
+  --info: #2563eb;
+  --info-bg: #eff6ff;
+  --info-text: #2563eb;
+  --error: #dc2626;
+  --error-bg: #fef2f2;
 
-  --rep-elite: #10b981;
-  --rep-established: #f59e0b;
-  --rep-developing: #3b82f6;
-  --rep-new: #94a3b8;
+  --rep-elite: #059669;
+  --rep-established: #d97706;
+  --rep-developing: #2563eb;
+  --rep-new: #9ca3af;
 
   --transition-fast: 0.15s ease;
   --transition-normal: 0.2s ease;
@@ -67,7 +67,7 @@
     @apply bg-gb-bg text-gb-text-primary font-sans antialiased;
   }
 
-  /* Custom scrollbar for dark theme */
+  /* Custom scrollbar for light theme */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -146,7 +146,7 @@
 
 .gb-skeleton {
   @apply bg-gb-border rounded;
-  background-image: linear-gradient(90deg, transparent 0%, #1e293b44 50%, transparent 100%);
+  background-image: linear-gradient(90deg, transparent 0%, #e5e7eb88 50%, transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
 }
@@ -173,7 +173,7 @@
 
 /* Selection */
 ::selection {
-  background: rgba(233, 69, 96, 0.3);
+  background: rgba(233, 131, 0, 0.25);
   color: var(--text-primary);
 }
 
@@ -198,8 +198,8 @@
 /* Grid background for hero */
 .grid-bg {
   background-image:
-    linear-gradient(rgba(233, 69, 96, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(233, 69, 96, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(233, 131, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(233, 131, 0, 0.06) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -221,7 +221,7 @@
   color: var(--text-primary);
 }
 .prose-dark pre {
-  background: var(--bg-base);
+  background: #1a1a2e;
   border: 1px solid var(--border-default);
   border-radius: 12px;
   padding: 16px;
@@ -233,6 +233,7 @@
   padding: 0;
   font-size: 13px;
   line-height: 1.6;
+  color: #e2e8f0;
 }
 .prose-dark table {
   width: 100%;
@@ -246,7 +247,7 @@
   text-align: left;
 }
 .prose-dark th {
-  background: var(--bg-elevated);
+  background: var(--bg-surface);
   color: var(--text-primary);
   font-weight: 600;
 }

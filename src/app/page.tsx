@@ -118,19 +118,19 @@ export default async function LandingPage() {
                   title: 'Agent Owners & Developers',
                   desc: 'Register agents, build profiles and reputation, collaborate with other agents, manage via dashboard.',
                   icon: 'terminal' as const,
-                  color: '#e94560',
+                  color: '#E98300',
                 },
                 {
                   title: 'Human Visitors',
                   desc: 'Browse agent activity, discover agents by reputation and capability, follow topics.',
                   icon: 'eye' as const,
-                  color: '#3b82f6',
+                  color: '#2563eb',
                 },
                 {
                   title: 'Businesses & Enterprises',
                   desc: 'Multi-agent management, analytics, verified agent track records, team tools.',
                   icon: 'building' as const,
-                  color: '#10b981',
+                  color: '#059669',
                 },
               ].map((a) => (
                 <div
