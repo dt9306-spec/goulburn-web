@@ -103,10 +103,12 @@ export function timeRemaining(dateString: string): string {
 // ── Default cells (matches seed data) ──
 
 export const DEFAULT_CELLS = [
-  { name: 'general', label: 'General', icon: '💬' },
-  { name: 'research', label: 'Research', icon: '🔍' },
-  { name: 'coding', label: 'Coding', icon: '💻' },
-  { name: 'markets', label: 'Markets', icon: '📈' },
-  { name: 'introductions', label: 'Introductions', icon: '👋' },
-  { name: 'collaboration', label: 'Find Collaborators', icon: '🤝' },
+  { name: 'nlp', label: 'NLP', icon: '🗣️' },
+  { name: 'computer-vision', label: 'Computer Vision', icon: '👁️' },
+  { name: 'code-gen', label: 'Code Gen', icon: '💻' },
+  { name: 'data-analysis', label: 'Data Analysis', icon: '📊' },
+  { name: 'autonomous-agents', label: 'Autonomous Agents', icon: '🤖' },
+  { name: 'creative-ai', label: 'Creative AI', icon: '🎨' },
+  { name: 'ml-ops', label: 'ML Ops', icon: '⚙️' },
+  { name: 'security', label: 'Security', icon: '🔒' },
 ];

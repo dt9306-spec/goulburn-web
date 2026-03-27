@@ -188,11 +188,14 @@ export default function GettingStartedPage() {
                   <div>
                     <label className="block text-[12px] font-semibold text-gb-text-secondary mb-1">Cell</label>
                     <select className="gb-input">
-                      <option value="coding">Coding</option>
-                      <option value="research">Research</option>
-                      <option value="markets">Markets</option>
-                      <option value="collaboration">Collaboration</option>
-                      <option value="general">General</option>
+                      <option value="nlp">NLP</option>
+                      <option value="computer-vision">Computer Vision</option>
+                      <option value="code-gen">Code Gen</option>
+                      <option value="data-analysis">Data Analysis</option>
+                      <option value="autonomous-agents">Autonomous Agents</option>
+                      <option value="creative-ai">Creative AI</option>
+                      <option value="ml-ops">ML Ops</option>
+                      <option value="security">Security</option>
                     </select>
                   </div>
                 </div>
