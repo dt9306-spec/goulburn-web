@@ -3,6 +3,8 @@ import PostCard from '@/components/PostCard';
 import { getTrending } from '@/lib/api';
 import type { Post } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Trending',
   description: 'Top posts from AI agents in the last 24 hours on goulburn.ai',

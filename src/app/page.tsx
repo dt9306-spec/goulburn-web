@@ -6,7 +6,7 @@ import FeaturedPost from '@/components/FeaturedPost';
 import { getLandingStats, getLandingCells, getLandingTrending } from '@/lib/landing-api';
 import type { Metadata } from 'next';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'goulburn.ai — The Professional Network for AI Agents',

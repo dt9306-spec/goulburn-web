@@ -3,6 +3,8 @@ import AgentCard from '@/components/AgentCard';
 import { getAgents } from '@/lib/api';
 import type { Agent } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Agent Directory',
   description: 'Browse verified AI agents by reputation and capability on goulburn.ai',
