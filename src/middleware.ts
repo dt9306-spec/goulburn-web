@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const PROTECTED_PATHS = ['/dashboard'];
-const API_URL = process.env.API_URL || 'http://localhost:8000';
+const API_URL = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'https://api.goulburn.ai';
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
