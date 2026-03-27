@@ -4,6 +4,64 @@
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;700&display=swap');
 
+/* ── Design tokens (used by Phase 7 components) ── */
+:root {
+  --bg-base: #020617;
+  --bg-surface: #0f172a;
+  --bg-elevated: #1e293b;
+  --bg-input: #020617;
+  --bg-overlay: rgba(0, 0, 0, 0.8);
+
+  --brand-primary: #e94560;
+  --brand-primary-hover: #c73a52;
+  --brand-secondary: #0f3460;
+  --brand-secondary-hover: #1e5090;
+
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-faint: #475569;
+
+  --border-default: #1e293b;
+  --border-hover: #e94560;
+  --border-focus: #3b82f6;
+
+  --success: #10b981;
+  --success-bg: #064e3b;
+  --success-text: #34d399;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  --info-bg: #0f3460;
+  --info-text: #60a5fa;
+  --error: #ef4444;
+  --error-bg: #450a0a;
+
+  --rep-elite: #10b981;
+  --rep-established: #f59e0b;
+  --rep-developing: #3b82f6;
+  --rep-new: #94a3b8;
+
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.6s ease;
+  --transition-emphasis: 0.8s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0s;
+    --transition-normal: 0s;
+    --transition-slow: 0s;
+    --transition-emphasis: 0s;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
+}
+
 @layer base {
   body {
     @apply bg-gb-bg text-gb-text-primary font-sans antialiased;
@@ -91,4 +149,107 @@
   background-image: linear-gradient(90deg, transparent 0%, #1e293b44 50%, transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ── Phase 7: Landing & docs styles ── */
+
+/* Skip to content link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 200;
+  padding: 8px 16px;
+  background: var(--brand-primary);
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 8px;
+}
+
+/* Selection */
+::selection {
+  background: rgba(233, 69, 96, 0.3);
+  color: var(--text-primary);
+}
+
+/* Focus ring utility */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--border-focus);
+}
+
+/* Landing page entrance */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fadeSlideUp 0.6s ease forwards;
+}
+.animate-delay-100 { animation-delay: 0.1s; opacity: 0; }
+.animate-delay-200 { animation-delay: 0.2s; opacity: 0; }
+.animate-delay-300 { animation-delay: 0.3s; opacity: 0; }
+
+/* Grid background for hero */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(233, 69, 96, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(233, 69, 96, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Prose styling for docs */
+.prose-dark h1 { font-size: 22px; font-weight: 700; line-height: 1.3; color: var(--text-primary); margin: 32px 0 16px; }
+.prose-dark h2 { font-size: 16px; font-weight: 700; line-height: 1.3; color: var(--text-primary); margin: 28px 0 12px; }
+.prose-dark h3 { font-size: 14px; font-weight: 700; line-height: 1.4; color: var(--text-primary); margin: 24px 0 8px; }
+.prose-dark p { font-size: 14px; line-height: 1.6; color: var(--text-secondary); margin: 12px 0; }
+.prose-dark ul, .prose-dark ol { padding-left: 20px; margin: 12px 0; }
+.prose-dark li { font-size: 14px; line-height: 1.6; color: var(--text-secondary); margin: 4px 0; }
+.prose-dark a { color: var(--brand-primary); text-decoration: none; }
+.prose-dark a:hover { text-decoration: underline; }
+.prose-dark code {
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg-elevated);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+.prose-dark pre {
+  background: var(--bg-base);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  padding: 16px;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+.prose-dark pre code {
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.prose-dark table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+.prose-dark th, .prose-dark td {
+  border: 1px solid var(--border-default);
+  padding: 8px 12px;
+  font-size: 13px;
+  text-align: left;
+}
+.prose-dark th {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.prose-dark td {
+  color: var(--text-secondary);
 }

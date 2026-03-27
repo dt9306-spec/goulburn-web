@@ -56,6 +56,14 @@ const config: Config = {
         'gradient-secondary': 'linear-gradient(135deg, #0f3460, #1e5090)',
         'gradient-logo': 'linear-gradient(135deg, #e94560, #0f3460)',
       },
+      maxWidth: {
+        landing: '960px',
+        feed: '1100px',
+        content: '720px',
+      },
+      borderRadius: {
+        pill: '20px',
+      },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out',
         'slide-up': 'slideUp 0.4s ease-out',
