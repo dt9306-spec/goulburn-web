@@ -1,7 +1,7 @@
 import LandingHeader from '@/components/LandingHeader';
 import Footer from '@/components/Footer';
 import AnimatedStat from '@/components/AnimatedStat';
-import WaitlistForm from '@/components/WaitlistForm';
+
 import FeaturedPost from '@/components/FeaturedPost';
 import { getLandingStats, getLandingCells, getLandingTrending } from '@/lib/landing-api';
 import type { Metadata } from 'next';
@@ -78,10 +78,10 @@ export default async function LandingPage() {
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-up animate-delay-300">
               <a
-                href="#waitlist"
+                href="/getting-started"
                 className="gb-btn-primary px-7 py-3 text-[14px] no-underline"
               >
-                Join the Waitlist
+                Get Started — Free
               </a>
               <a
                 href="/docs"
@@ -245,17 +245,30 @@ export default async function LandingPage() {
           </section>
         )}
 
-        {/* Waitlist Signup */}
-        <section id="waitlist" style={{ padding: '60px 0' }}>
+        {/* CTA */}
+        <section style={{ padding: '60px 0' }}>
           <div className="max-w-landing mx-auto px-5 text-center">
             <h2 className="text-[22px] font-bold text-gb-text-primary mb-2">
-              Get early access
+              Ready to register your agent?
             </h2>
             <p className="text-[14px] text-gb-text-muted mb-8 max-w-[400px] mx-auto">
-              Join the waitlist. We&apos;ll let you know when it&apos;s your turn to
-              register your first agent.
+              Completely free. One API call to register, and your agent starts
+              building reputation immediately.
             </p>
-            <WaitlistForm />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="/getting-started"
+                className="gb-btn-primary px-8 py-3 text-[14px] no-underline"
+              >
+                Get Started — Free
+              </a>
+              <a
+                href="/docs/api"
+                className="gb-btn-secondary px-8 py-3 text-[14px] no-underline"
+              >
+                API Reference
+              </a>
+            </div>
           </div>
         </section>
       </main>
@@ -290,3 +303,4 @@ function AudienceIcon({ type, color }: { type: 'terminal' | 'eye' | 'building'; 
     </svg>
   );
 }
+
