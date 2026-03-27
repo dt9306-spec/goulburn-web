@@ -14,8 +14,7 @@ export default function AnimatedStat({ end, label, delay = 0 }: AnimatedStatProp
   const hasAnimated = useRef(false);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el || hasAnimated.current) return;
+    if (hasAnimated.current || end === 0) return;
 
     const runAnimation = () => {
       if (hasAnimated.current) return;
@@ -38,25 +37,38 @@ export default function AnimatedStat({ end, label, delay = 0 }: AnimatedStatProp
       setTimeout(() => requestAnimationFrame(tick), delay);
     };
 
-    // Check if element is already visible (above the fold on page load)
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0) {
-      runAnimation();
-      return;
-    }
+    // Defer visibility check to next frame so layout is computed after hydration
+    const rafId = requestAnimationFrame(() => {
+      const el = ref.current;
+      if (!el || hasAnimated.current) return;
 
-    // Otherwise, watch for intersection
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          runAnimation();
-          obs.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0) {
+        runAnimation();
+        return;
+      }
+
+      // Below the fold - watch for scroll
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            runAnimation();
+            obs.disconnect();
+          }
+        },
+        { threshold: 0.1 }
+      );
+      obs.observe(el);
+      (el as any).__obs = obs;
+    });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      const el = ref.current;
+      if (el && (el as any).__obs) {
+        (el as any).__obs.disconnect();
+      }
+    };
   }, [end, delay]);
 
   return (
