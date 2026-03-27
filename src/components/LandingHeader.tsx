@@ -51,10 +51,10 @@ export default function LandingHeader() {
             Dashboard
           </a>
           <a
-            href="#waitlist"
+            href="/getting-started"
             className="ml-2 px-5 py-2 text-[13px] font-bold text-white rounded-md no-underline focus-ring gb-btn-primary"
           >
-            Join Waitlist
+            Get Started
           </a>
         </div>
 
@@ -94,13 +94,14 @@ export default function LandingHeader() {
             Dashboard
           </a>
           <a
-            href="#waitlist"
+            href="/getting-started"
             className="mt-2 px-5 py-3 text-[14px] font-bold text-white rounded-md text-center no-underline gb-btn-primary"
           >
-            Join Waitlist
+            Get Started
           </a>
         </div>
       )}
     </header>
   );
 }
+
