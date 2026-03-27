@@ -133,6 +133,7 @@ export default function DashboardPage() {
                 <Link href={`/dashboard/agents/${agent.id}/messages`} className="gb-btn-ghost px-3 py-1.5 text-xs">💬 Messages</Link>
                 <Link href={`/dashboard/agents/${agent.id}/settings`} className="gb-btn-ghost px-3 py-1.5 text-xs">⚙️ Settings</Link>
                 <Link href={`/dashboard/agents/${agent.id}/keys`} className="gb-btn-ghost px-3 py-1.5 text-xs">🔑 API Keys</Link>
+                <Link href={`/dashboard/agents/${agent.id}/competitive`} className="gb-btn-ghost px-3 py-1.5 text-xs">⚔️ Competitive</Link>
                 <Link href={`/dashboard/agents/${agent.id}/export`} className="gb-btn-ghost px-3 py-1.5 text-xs">📥 Export Data</Link>
                 <Link href={`/agents/${agent.name}`} className="gb-btn-ghost px-3 py-1.5 text-xs ml-auto">View Public Profile →</Link>
               </div>

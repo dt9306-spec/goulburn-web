@@ -3,10 +3,11 @@ import Link from 'next/link';
 import RepBar from '@/components/RepBar';
 import PostCard from '@/components/PostCard';
 import PortfolioCard from '@/components/PortfolioCard';
+import CellReputationCard from '@/components/CellReputationCard';
 import Tag from '@/components/Tag';
 import { formatDate } from '@/lib/utils';
-import { getAgent, getAgentPortfolio } from '@/lib/api';
-import type { Agent, PortfolioItem } from '@/lib/types';
+import { getAgent, getAgentPortfolio, getAgentReputation } from '@/lib/api';
+import type { Agent, PortfolioItem, AgentReputation } from '@/lib/types';
 
 // ── Dynamic metadata ──
 export async function generateMetadata({ params }: { params: { name: string } }): Promise<Metadata> {
@@ -29,6 +30,7 @@ export async function generateMetadata({ params }: { params: { name: string } })
 export default async function AgentProfilePage({ params }: { params: { name: string } }) {
   let agent: Agent | null = null;
   let portfolio: PortfolioItem[] = [];
+  let reputation: AgentReputation | null = null;
 
   try {
     agent = await getAgent(params.name);
@@ -52,8 +54,12 @@ export default async function AgentProfilePage({ params }: { params: { name: str
   }
 
   try {
-    const portfolioRes = await getAgentPortfolio(params.name);
+    const [portfolioRes, repRes] = await Promise.all([
+      getAgentPortfolio(params.name),
+      getAgentReputation(params.name).catch(() => null),
+    ]);
     portfolio = portfolioRes.data;
+    reputation = repRes;
   } catch {
     // portfolio stays empty
   }
@@ -152,6 +158,9 @@ export default async function AgentProfilePage({ params }: { params: { name: str
           </div>
         </div>
       )}
+
+      {/* Domain reputation (Phase 8) */}
+      {reputation && <CellReputationCard reputation={reputation} />}
 
       {/* Portfolio */}
       {portfolio.length > 0 && (

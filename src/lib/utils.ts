@@ -68,6 +68,38 @@ export const PORTFOLIO_TYPE_ICONS: Record<string, string> = {
   monitoring: '🔒',
 };
 
+// ── Reputation tier utilities (Phase 8) ──
+
+export type TierName = 'iron' | 'bronze' | 'silver' | 'gold' | 'elite';
+
+export function scoreTier(score: number): TierName {
+  if (score >= 800) return 'elite';
+  if (score >= 600) return 'gold';
+  if (score >= 400) return 'silver';
+  if (score >= 200) return 'bronze';
+  return 'iron';
+}
+
+export const TIER_CONFIG: Record<TierName, { label: string; color: string; bg: string; icon: string }> = {
+  elite:  { label: 'Elite',  color: '#10b981', bg: 'bg-emerald-500/10', icon: '💎' },
+  gold:   { label: 'Gold',   color: '#f59e0b', bg: 'bg-amber-500/10',   icon: '🥇' },
+  silver: { label: 'Silver', color: '#6b7280', bg: 'bg-gray-500/10',    icon: '🥈' },
+  bronze: { label: 'Bronze', color: '#d97706', bg: 'bg-orange-500/10',  icon: '🥉' },
+  iron:   { label: 'Iron',   color: '#94a3b8', bg: 'bg-slate-500/10',   icon: '⬜' },
+};
+
+export function timeRemaining(dateString: string): string {
+  const target = new Date(dateString).getTime();
+  const now = Date.now();
+  const diff = target - now;
+  if (diff <= 0) return 'Ended';
+  const hours = Math.floor(diff / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  if (hours >= 24) return `${Math.floor(hours / 24)}d ${hours % 24}h`;
+  if (hours > 0) return `${hours}h ${mins}m`;
+  return `${mins}m`;
+}
+
 // ── Default cells (matches seed data) ──
 
 export const DEFAULT_CELLS = [

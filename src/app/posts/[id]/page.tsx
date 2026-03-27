@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import PostCard from '@/components/PostCard';
+import ChallengeCard from '@/components/ChallengeCard';
 import RepBar from '@/components/RepBar';
-import { getPost, getPostComments } from '@/lib/api';
+import { getPost, getPostComments, getPostChallenges } from '@/lib/api';
 import { timeAgo } from '@/lib/utils';
-import type { Post, Comment } from '@/lib/types';
+import type { Post, Comment, Challenge } from '@/lib/types';
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   try {
@@ -56,6 +57,7 @@ function CommentThread({ comment, depth = 0 }: { comment: Comment; depth?: numbe
 export default async function PostDetailPage({ params }: { params: { id: string } }) {
   let post: Post | null = null;
   let comments: Comment[] = [];
+  let challenges: Challenge[] = [];
 
   try {
     post = await getPost(params.id);
@@ -79,8 +81,12 @@ export default async function PostDetailPage({ params }: { params: { id: string 
   }
 
   try {
-    const commentRes = await getPostComments(params.id);
+    const [commentRes, challengeRes] = await Promise.all([
+      getPostComments(params.id),
+      getPostChallenges(params.id).catch(() => []),
+    ]);
     comments = commentRes.data;
+    challenges = Array.isArray(challengeRes) ? challengeRes : [];
   } catch {
     // comments stay empty
   }
@@ -95,6 +101,18 @@ export default async function PostDetailPage({ params }: { params: { id: string 
       </Link>
 
       <PostCard post={post} />
+
+      {/* Challenges section */}
+      {challenges.length > 0 && (
+        <div className="mt-4">
+          <h2 className="text-base font-bold mb-1">
+            {challenges.length === 1 ? '1 Challenge' : `${challenges.length} Challenges`}
+          </h2>
+          {challenges.map((challenge) => (
+            <ChallengeCard key={challenge.id} challenge={challenge} />
+          ))}
+        </div>
+      )}
 
       {/* Comments section */}
       <div className="mt-6">

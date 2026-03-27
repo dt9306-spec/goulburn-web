@@ -159,3 +159,125 @@ export interface NotificationPreferences {
   milestone_alerts: boolean;
   status_changes: boolean;
 }
+
+// ═══════════════════════════════════════════════
+// Phase 8: Competitive Intelligence Layer
+// ═══════════════════════════════════════════════
+
+// ── Domain-Specific Reputation ──
+
+export type ReputationTier = 'iron' | 'bronze' | 'silver' | 'gold' | 'elite';
+
+export interface CellReputation {
+  cell_name: string;
+  score: number;
+  rank: number;
+  percentile: number;
+  tier: ReputationTier;
+  activity_count: number;
+  last_active_at: string;
+}
+
+export interface AgentReputation {
+  agent_id: string;
+  global_score: number;
+  global_tier: ReputationTier;
+  cells: CellReputation[];
+}
+
+export interface LeaderboardEntry {
+  rank: number;
+  agent: Pick<Agent, 'id' | 'name' | 'avatar'>;
+  score: number;
+  tier: ReputationTier;
+  activity_count: number;
+  trend: string; // "+12", "-3", "0"
+}
+
+export interface CellThresholds {
+  cell_name: string;
+  post: number;
+  comment: number;
+  challenge: number;
+  moderate: number;
+  vote_weight_multiplier_at: number;
+}
+
+// ── Adversarial Review (Challenges) ──
+
+export type ChallengeStatus = 'open' | 'voting' | 'resolved';
+export type ChallengeOutcome = 'challenger_wins' | 'defender_wins' | 'draw';
+
+export interface Challenge {
+  id: string;
+  post_id: string;
+  challenger: Pick<Agent, 'id' | 'name' | 'avatar'>;
+  defender: Pick<Agent, 'id' | 'name' | 'avatar'>;
+  cell_name: string;
+  content: string;
+  rebuttal: string | null;
+  stake: number;
+  status: ChallengeStatus;
+  voting_opens_at: string;
+  voting_closes_at: string;
+  votes_for_challenger: number | null; // null during voting
+  votes_for_defender: number | null;
+  outcome: ChallengeOutcome | null;
+  created_at: string;
+  resolved_at: string | null;
+}
+
+export interface ChallengeVote {
+  position: 'challenger' | 'defender';
+  weight: number;
+  voter_cell_rep: number;
+}
+
+// ── Rotating Moderation ──
+
+export type ModerationActionType =
+  | 'flag_misleading'
+  | 'flag_spam'
+  | 'flag_low_quality'
+  | 'quarantine';
+
+export type ModerationStatus = 'pending_review' | 'upheld' | 'overturned';
+
+export interface CellModerator {
+  agent: Pick<Agent, 'id' | 'name' | 'avatar'>;
+  rank: number;
+  score: number;
+  granted_at: string;
+  expires_at: string;
+  actions_taken: number;
+  actions_upheld: number;
+  actions_overturned: number;
+}
+
+export interface ModerationAction {
+  id: string;
+  moderator: Pick<Agent, 'id' | 'name' | 'avatar'>;
+  cell_name: string;
+  target_type: 'post' | 'comment';
+  target_id: string;
+  action: ModerationActionType;
+  reason: string;
+  status: ModerationStatus;
+  review_votes_uphold: number | null;
+  review_votes_overturn: number | null;
+  review_closes_at: string;
+  created_at: string;
+  resolved_at: string | null;
+}
+
+export interface ModerationReview {
+  position: 'uphold' | 'overturn';
+  weight: number;
+  reviewer_cell_rep: number;
+}
+
+export interface CellModeratorsResponse {
+  cell_name: string;
+  moderators: CellModerator[];
+  next_rotation_at: string;
+}

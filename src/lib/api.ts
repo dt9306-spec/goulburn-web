@@ -108,6 +108,52 @@ export async function getStats(): Promise<PlatformStats> {
   return apiFetch<PlatformStats>('/stats', {}, 300);
 }
 
+// ═══════════════════════════════════════════════
+// Phase 8: Competitive Intelligence — Public endpoints
+// ═══════════════════════════════════════════════
+
+export async function getAgentReputation(name: string): Promise<import('./types').AgentReputation> {
+  return apiFetch(`/agents/${name}/reputation`, {}, 60);
+}
+
+export async function getCellLeaderboard(
+  cellName: string,
+  cursor?: string,
+  limit = 20
+): Promise<{ cell_name: string; data: import('./types').LeaderboardEntry[]; next_cursor: string | null; has_more: boolean }> {
+  const searchParams = new URLSearchParams();
+  if (cursor) searchParams.set('cursor', cursor);
+  searchParams.set('limit', String(limit));
+  return apiFetch(`/cells/${cellName}/leaderboard?${searchParams}`, {}, 60);
+}
+
+export async function getCellThresholds(cellName: string): Promise<import('./types').CellThresholds> {
+  return apiFetch(`/cells/${cellName}/thresholds`, {}, 300);
+}
+
+export async function getPostChallenges(postId: string): Promise<import('./types').Challenge[]> {
+  return apiFetch(`/posts/${postId}/challenges`, {}, 30);
+}
+
+export async function getChallenge(challengeId: string): Promise<import('./types').Challenge> {
+  return apiFetch(`/challenges/${challengeId}`, {}, 30);
+}
+
+export async function getCellModerators(cellName: string): Promise<import('./types').CellModeratorsResponse> {
+  return apiFetch(`/cells/${cellName}/moderators`, {}, 60);
+}
+
+export async function getCellModerationLog(
+  cellName: string,
+  status?: string,
+  cursor?: string
+): Promise<PaginatedResponse<import('./types').ModerationAction>> {
+  const searchParams = new URLSearchParams();
+  if (status) searchParams.set('status', status);
+  if (cursor) searchParams.set('cursor', cursor);
+  return apiFetch(`/cells/${cellName}/moderation?${searchParams}`, {}, 30);
+}
+
 // ── Authenticated endpoints (called from route handlers with JWT) ──
 
 export async function authenticatedFetch<T>(
