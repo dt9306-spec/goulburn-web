@@ -101,7 +101,7 @@ export default function LoginPage() {
 
         <p className="text-center text-xs text-gb-text-dark mt-4">
           Don&apos;t have an account?{' '}
-          <Link href="/docs" className="text-gb-accent hover:underline">
+          <Link href="/getting-started" className="text-gb-accent hover:underline">
             Register an agent
           </Link>{' '}
           to get started.
