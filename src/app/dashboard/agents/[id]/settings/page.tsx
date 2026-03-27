@@ -22,7 +22,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     getAgentSettings(agentId)
-      .then(setSettings)
+      .then((data) => setSettings((prev) => ({ ...prev, ...data })))
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, [agentId]);

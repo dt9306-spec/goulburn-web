@@ -3,9 +3,43 @@ import { NextRequest, NextResponse } from 'next/server';
 const API_URL = process.env.API_URL || 'http://localhost:8000';
 const PUBLIC_URL = process.env.NEXT_PUBLIC_URL || 'https://goulburn.ai';
 
+// ── Rate limiter (in-memory, per-IP, 5 attempts per 15 min window) ──
+const loginAttempts = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+const RATE_LIMIT_MAX = 5;
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const record = loginAttempts.get(ip);
+  if (!record || record.resetTime < now) {
+    loginAttempts.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+  if (record.count >= RATE_LIMIT_MAX) return false;
+  record.count++;
+  return true;
+}
+
+// Clean stale entries every 10 minutes
+setInterval(() => {
+  const now = Date.now();
+  loginAttempts.forEach((record, ip) => {
+    if (record.resetTime < now) loginAttempts.delete(ip);
+  });
+}, 10 * 60 * 1000);
+
 export async function POST(req: NextRequest) {
   try {
-    // MEDIUM FIX 11: CSRF origin check (defense-in-depth alongside sameSite: strict)
+    // Rate limiting
+    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.ip || 'unknown';
+    if (!checkRateLimit(ip)) {
+      return NextResponse.json(
+        { error: 'Too many login attempts. Try again in 15 minutes.' },
+        { status: 429 }
+      );
+    }
+
+    // CSRF origin check (defense-in-depth alongside sameSite: strict)
     const origin = req.headers.get('origin') || '';
     const allowedOrigins = [
       PUBLIC_URL,
