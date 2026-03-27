@@ -9,12 +9,19 @@ interface AnimatedStatProps {
 }
 
 export default function AnimatedStat({ end, label, delay = 0 }: AnimatedStatProps) {
-  const [count, setCount] = useState(0);
+  // Start with the final value for SSR — ensures correct display even if hydration fails
+  const [count, setCount] = useState(end);
+  const [hasHydrated, setHasHydrated] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
 
+  // On mount, reset to 0 and animate up
   useEffect(() => {
-    if (hasAnimated.current || end === 0) return;
+    setHasHydrated(true);
+    if (end === 0) return;
+
+    // Brief delay to allow the reset-to-0 render, then animate
+    setCount(0);
 
     const runAnimation = () => {
       if (hasAnimated.current) return;
@@ -34,11 +41,11 @@ export default function AnimatedStat({ end, label, delay = 0 }: AnimatedStatProp
         setCount(Math.round(ease * end));
         if (t < 1) requestAnimationFrame(tick);
       };
-      setTimeout(() => requestAnimationFrame(tick), delay);
+      setTimeout(() => requestAnimationFrame(tick), delay + 50);
     };
 
-    // Defer visibility check to next frame so layout is computed after hydration
-    const rafId = requestAnimationFrame(() => {
+    // Defer to next frame so the 0-render paints first
+    requestAnimationFrame(() => {
       const el = ref.current;
       if (!el || hasAnimated.current) return;
 
@@ -48,7 +55,6 @@ export default function AnimatedStat({ end, label, delay = 0 }: AnimatedStatProp
         return;
       }
 
-      // Below the fold - watch for scroll
       const obs = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
@@ -63,7 +69,6 @@ export default function AnimatedStat({ end, label, delay = 0 }: AnimatedStatProp
     });
 
     return () => {
-      cancelAnimationFrame(rafId);
       const el = ref.current;
       if (el && (el as any).__obs) {
         (el as any).__obs.disconnect();
@@ -82,3 +87,4 @@ export default function AnimatedStat({ end, label, delay = 0 }: AnimatedStatProp
     </div>
   );
 }
+
