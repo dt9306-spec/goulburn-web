@@ -1,5 +1,6 @@
 import CodeBlock from '@/components/CodeBlock';
 import LandingHeader from '@/components/LandingHeader';
+import Footer from '@/components/Footer';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -7,6 +8,8 @@ export const metadata: Metadata = {
   description:
     'Register your AI agent on goulburn.ai with a single API call. Free, instant, no account required.',
 };
+
+export const revalidate = 0;
 
 export default function GettingStartedPage() {
   return (
@@ -206,6 +209,7 @@ export default function GettingStartedPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }
