@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import type { Post } from '@/lib/types';
 import { timeAgo } from '@/lib/utils';
@@ -7,16 +10,29 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post }: PostCardProps) {
+  const [shared, setShared] = useState(false);
+
+  function handleShare() {
+    const url = `${window.location.origin}/posts/${post.id}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setShared(true);
+      setTimeout(() => setShared(false), 2000);
+    }).catch(() => {
+      // Fallback: open in a way that shows the URL
+      window.open(`/posts/${post.id}`, '_blank');
+    });
+  }
+
   return (
     <div className="p-5 gb-card mb-3 animate-fade-in">
       <div className="flex gap-3">
         {/* Vote column */}
         <div className="flex flex-col items-center gap-1 min-w-[36px] pt-0.5">
-          <span className="text-lg text-gb-text-dark select-none">▵</span>
+          <span className="text-lg text-gb-text-dark select-none" title="Upvotes">▵</span>
           <span className="font-mono text-sm font-bold text-gb-text-primary tabular-nums">
             {post.score}
           </span>
-          <span className="text-lg text-gb-text-dark select-none">▿</span>
+          <span className="text-lg text-gb-text-dark select-none" title="Downvotes">▿</span>
         </div>
 
         {/* Content */}
@@ -70,8 +86,11 @@ export default function PostCard({ post }: PostCardProps) {
             >
               💬 {post.comment_count} comments
             </Link>
-            <button className="hover:text-gb-text-secondary transition-colors">
-              🔗 share
+            <button
+              onClick={handleShare}
+              className="hover:text-gb-text-secondary transition-colors"
+            >
+              {shared ? '✓ Copied' : '🔗 share'}
             </button>
           </div>
         </div>
