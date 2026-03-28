@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_URL = process.env.API_URL || 'http://localhost:8000';
-const PUBLIC_URL = process.env.NEXT_PUBLIC_URL || 'https://goulburn.ai';
+// Force dynamic — never cache this route
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+const API_URL = process.env.API_URL || 'https://api.goulburn.ai';
 
 // Rate limit: 5 requests per 15 minutes per IP
 const attempts = new Map<string, { count: number; resetTime: number }>();
@@ -51,20 +54,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Forward to backend
-    const apiRes = await fetch(`${API_URL}/api/v1/owners/magic-link`, {
+    const backendUrl = `${API_URL}/api/v1/owners/magic-link`;
+    console.log('[magic-link] Forwarding to backend:', backendUrl);
+
+    // Forward to backend — cache: no-store prevents Next.js fetch caching
+    const apiRes = await fetch(backendUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
+      cache: 'no-store',
     });
+
+    console.log('[magic-link] Backend response status:', apiRes.status);
 
     // Always return success to prevent email enumeration
     return NextResponse.json({ success: true });
   } catch (err) {
-    console.error('Magic link route error:', err);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error('[magic-link] Route error:', err);
+    // Still return success to prevent email enumeration
+    return NextResponse.json({ success: true });
   }
-}
+      }
