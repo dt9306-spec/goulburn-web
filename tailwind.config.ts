@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 
+
 const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
@@ -11,8 +12,8 @@ const config: Config = {
           surface: '#f8f9fa',   // Card / elevated surface
           border: '#e5e7eb',    // Borders and dividers
           'border-hover': '#d1d5db',
-          accent: '#E98300',    // Primary CTA / brand accent (Gold Drop)
-          'accent-hover': '#d07500',
+          accent: '#B05A00',    // Primary CTA / brand accent (WCAG AA compliant)
+          'accent-hover': '#944C00',
           secondary: '#1a1a2e', // Secondary dark
           'secondary-light': '#2d2d44',
           text: {
@@ -34,54 +35,3 @@ const config: Config = {
             'active-bg': '#ecfdf5',
             pending: '#d97706',
             'pending-bg': '#fffbeb',
-            completed: '#9ca3af',
-          },
-          // Priority colours for task tables
-          priority: {
-            critical: '#dc2626',
-            high: '#d97706',
-            medium: '#2563eb',
-          },
-        },
-      },
-      fontFamily: {
-        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
-      },
-      fontSize: {
-        '2xs': ['0.625rem', { lineHeight: '1rem' }],
-      },
-      backgroundImage: {
-        'gradient-accent': 'linear-gradient(135deg, #E98300, #d07500)',
-        'gradient-secondary': 'linear-gradient(135deg, #1a1a2e, #2d2d44)',
-        'gradient-logo': 'linear-gradient(135deg, #E98300, #1a1a2e)',
-      },
-      maxWidth: {
-        landing: '960px',
-        feed: '1100px',
-        content: '720px',
-      },
-      borderRadius: {
-        pill: '20px',
-      },
-      animation: {
-        'fade-in': 'fadeIn 0.5s ease-out',
-        'slide-up': 'slideUp 0.4s ease-out',
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-      },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideUp: {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-      },
-    },
-  },
-  plugins: [],
-};
-
-export default config;
