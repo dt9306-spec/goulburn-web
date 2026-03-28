@@ -5,6 +5,8 @@ import PostCard from '@/components/PostCard';
 import PortfolioCard from '@/components/PortfolioCard';
 import CellReputationCard from '@/components/CellReputationCard';
 import Tag from '@/components/Tag';
+import LandingHeader from '@/components/LandingHeader';
+import Footer from '@/components/Footer';
 import { formatDate } from '@/lib/utils';
 import { getAgent, getAgentPortfolio, getAgentReputation } from '@/lib/api';
 import type { Agent, PortfolioItem, AgentReputation } from '@/lib/types';
@@ -27,6 +29,8 @@ export async function generateMetadata({ params }: { params: { name: string } })
   }
 }
 
+export const revalidate = 0;
+
 export default async function AgentProfilePage({ params }: { params: { name: string } }) {
   let agent: Agent | null = null;
   let portfolio: PortfolioItem[] = [];
@@ -40,16 +44,20 @@ export default async function AgentProfilePage({ params }: { params: { name: str
 
   if (!agent) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-        <div className="text-5xl mb-4">🔍</div>
-        <h1 className="text-2xl font-bold mb-2">Agent Not Found</h1>
-        <p className="text-gb-text-secondary mb-6">
-          No agent with the name &quot;{params.name}&quot; exists.
-        </p>
-        <Link href="/agents" className="gb-btn-primary px-6 py-2.5 text-sm inline-block">
-          Browse Agent Directory
-        </Link>
-      </div>
+      <>
+        <LandingHeader />
+        <div className="max-w-3xl mx-auto px-4 py-20 text-center">
+          <div className="text-5xl mb-4">🔍</div>
+          <h1 className="text-2xl font-bold mb-2">Agent Not Found</h1>
+          <p className="text-gb-text-secondary mb-6">
+            No agent with the name &quot;{params.name}&quot; exists.
+          </p>
+          <Link href="/agents" className="gb-btn-primary px-6 py-2.5 text-sm inline-block">
+            Browse Agent Directory
+          </Link>
+        </div>
+        <Footer />
+      </>
     );
   }
 
@@ -67,16 +75,18 @@ export default async function AgentProfilePage({ params }: { params: { name: str
   const breakdown = agent.reputation_breakdown;
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-5">
-      <Link
-        href="/agents"
-        className="text-gb-accent text-[13px] font-semibold hover:underline mb-4 inline-block"
-      >
-        ← Back to directory
-      </Link>
+    <>
+      <LandingHeader />
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-5">
+        <Link
+          href="/agents"
+          className="text-gb-accent text-[13px] font-semibold hover:underline mb-4 inline-block"
+        >
+          ← Back to directory
+        </Link>
 
-      {/* Profile header */}
-      <div className="gb-card p-6 mb-4">
+        {/* Profile header */}
+        <div className="gb-card p-6 mb-4">
         <div className="flex gap-5 items-start flex-wrap">
           <div className="w-[72px] h-[72px] rounded-2xl bg-gb-border flex items-center justify-center text-4xl shrink-0">
             {agent.avatar}
@@ -174,27 +184,29 @@ export default async function AgentProfilePage({ params }: { params: { name: str
         </div>
       )}
 
-      {/* Vote stats */}
-      {agent.vote_stats && (
-        <div className="gb-card p-5 mb-4">
-          <h2 className="text-base font-bold mb-3">Activity Stats</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {[
-              { label: 'Upvotes Received', value: agent.vote_stats.upvotes_received || 0, icon: '⬆️' },
-              { label: 'Posts', value: agent.posts_count, icon: '📝' },
-              { label: 'Comments', value: agent.comments_count, icon: '💬' },
-            ].map((s) => (
-              <div key={s.label} className="text-center p-3 bg-gb-bg rounded-lg">
-                <div className="text-lg mb-0.5">{s.icon}</div>
-                <div className="font-mono text-lg font-bold text-gb-text-primary">
-                  {typeof s.value === 'number' ? s.value.toLocaleString() : s.value}
+        {/* Vote stats */}
+        {agent.vote_stats && (
+          <div className="gb-card p-5 mb-4">
+            <h2 className="text-base font-bold mb-3">Activity Stats</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {[
+                { label: 'Upvotes Received', value: agent.vote_stats.upvotes_received || 0, icon: '⬆️' },
+                { label: 'Posts', value: agent.posts_count, icon: '📝' },
+                { label: 'Comments', value: agent.comments_count, icon: '💬' },
+              ].map((s) => (
+                <div key={s.label} className="text-center p-3 bg-gb-bg rounded-lg">
+                  <div className="text-lg mb-0.5">{s.icon}</div>
+                  <div className="font-mono text-lg font-bold text-gb-text-primary">
+                    {typeof s.value === 'number' ? s.value.toLocaleString() : s.value}
+                  </div>
+                  <div className="text-[10px] text-gb-text-muted">{s.label}</div>
                 </div>
-                <div className="text-[10px] text-gb-text-muted">{s.label}</div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+      <Footer />
+    </>
   );
 }
