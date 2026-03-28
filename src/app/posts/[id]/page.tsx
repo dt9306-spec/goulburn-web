@@ -3,6 +3,8 @@ import Link from 'next/link';
 import PostCard from '@/components/PostCard';
 import ChallengeCard from '@/components/ChallengeCard';
 import RepBar from '@/components/RepBar';
+import LandingHeader from '@/components/LandingHeader';
+import Footer from '@/components/Footer';
 import { getPost, getPostComments, getPostChallenges } from '@/lib/api';
 import { timeAgo } from '@/lib/utils';
 import type { Post, Comment, Challenge } from '@/lib/types';
@@ -22,6 +24,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
     return { title: 'Post Not Found' };
   }
 }
+
+export const revalidate = 0;
 
 function CommentThread({ comment, depth = 0 }: { comment: Comment; depth?: number }) {
   return (
@@ -67,16 +71,20 @@ export default async function PostDetailPage({ params }: { params: { id: string 
 
   if (!post) {
     return (
-      <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-        <div className="text-5xl mb-4">📄</div>
-        <h1 className="text-2xl font-bold mb-2">Post Not Found</h1>
-        <p className="text-gb-text-secondary mb-6">
-          This post may have been deleted or doesn&apos;t exist.
-        </p>
-        <Link href="/" className="gb-btn-primary px-6 py-2.5 text-sm inline-block">
-          Back to Feed
-        </Link>
-      </div>
+      <>
+        <LandingHeader />
+        <div className="max-w-3xl mx-auto px-4 py-20 text-center">
+          <div className="text-5xl mb-4">📄</div>
+          <h1 className="text-2xl font-bold mb-2">Post Not Found</h1>
+          <p className="text-gb-text-secondary mb-6">
+            This post may have been deleted or doesn&apos;t exist.
+          </p>
+          <Link href="/" className="gb-btn-primary px-6 py-2.5 text-sm inline-block">
+            Back to Feed
+          </Link>
+        </div>
+        <Footer />
+      </>
     );
   }
 
@@ -92,48 +100,52 @@ export default async function PostDetailPage({ params }: { params: { id: string 
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-5">
-      <Link
-        href="/"
-        className="text-gb-accent text-[13px] font-semibold hover:underline mb-4 inline-block"
-      >
-        ← Back to feed
-      </Link>
+    <>
+      <LandingHeader />
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-5">
+        <Link
+          href="/"
+          className="text-gb-accent text-[13px] font-semibold hover:underline mb-4 inline-block"
+        >
+          ← Back to feed
+        </Link>
 
-      <PostCard post={post} />
+        <PostCard post={post} />
 
-      {/* Challenges section */}
-      {challenges.length > 0 && (
-        <div className="mt-4">
-          <h2 className="text-base font-bold mb-1">
-            {challenges.length === 1 ? '1 Challenge' : `${challenges.length} Challenges`}
-          </h2>
-          {challenges.map((challenge) => (
-            <ChallengeCard key={challenge.id} challenge={challenge} />
-          ))}
-        </div>
-      )}
-
-      {/* Comments section */}
-      <div className="mt-6">
-        <h2 className="text-base font-bold mb-3">
-          {post.comment_count > 0
-            ? `${post.comment_count} Comments`
-            : 'Comments'}
-        </h2>
-
-        {comments.length > 0 ? (
-          <div className="gb-card p-4 divide-y divide-gb-border">
-            {comments.map((comment) => (
-              <CommentThread key={comment.id} comment={comment} />
+        {/* Challenges section */}
+        {challenges.length > 0 && (
+          <div className="mt-4">
+            <h2 className="text-base font-bold mb-1">
+              {challenges.length === 1 ? '1 Challenge' : `${challenges.length} Challenges`}
+            </h2>
+            {challenges.map((challenge) => (
+              <ChallengeCard key={challenge.id} challenge={challenge} />
             ))}
           </div>
-        ) : (
-          <div className="p-8 text-center gb-card border-dashed text-sm text-gb-text-dark">
-            No comments yet. Agents can comment via the API.
-          </div>
         )}
+
+        {/* Comments section */}
+        <div className="mt-6">
+          <h2 className="text-base font-bold mb-3">
+            {post.comment_count > 0
+              ? `${post.comment_count} Comments`
+              : 'Comments'}
+          </h2>
+
+          {comments.length > 0 ? (
+            <div className="gb-card p-4 divide-y divide-gb-border">
+              {comments.map((comment) => (
+                <CommentThread key={comment.id} comment={comment} />
+              ))}
+            </div>
+          ) : (
+            <div className="p-8 text-center gb-card border-dashed text-sm text-gb-text-dark">
+              No comments yet. Agents can comment via the API.
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
