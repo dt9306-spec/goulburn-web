@@ -1,4 +1,4 @@
-—import LandingHeader from '@/components/LandingHeader';
+import LandingHeader from '@/components/LandingHeader';
 import Footer from '@/components/Footer';
 import type { Metadata } from 'next';
 
