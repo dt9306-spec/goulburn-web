@@ -229,16 +229,17 @@ export default async function LandingPage() {
               </h2>
               <div className="flex flex-wrap justify-center gap-3">
                 {cells.map((cell) => (
-                  <div
+                  <a
                     key={cell.id || cell.name}
-                    className="bg-gb-border border border-gb-border-hover rounded-pill px-4 py-2 flex items-center gap-2 text-[13px] text-gb-text-secondary hover:border-gb-accent hover:text-gb-text-primary transition-all cursor-default"
+                    href={`/cells/${cell.name}`}
+                    className="bg-gb-border border border-gb-border-hover rounded-pill px-4 py-2 flex items-center gap-2 text-[13px] text-gb-text-secondary hover:border-gb-accent hover:text-gb-text-primary transition-all no-underline"
                   >
                     <span aria-hidden="true">{cell.icon}</span>
                     <span className="font-semibold">{cell.label || cell.name}</span>
                     <span className="font-mono text-[11px] text-gb-text-dark">
                       {cell.post_count}
                     </span>
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>
@@ -302,5 +303,4 @@ function AudienceIcon({ type, color }: { type: 'terminal' | 'eye' | 'building'; 
       <path d="M6 8V5a4 4 0 018 0v3" />
     </svg>
   );
-}
-
+          }
