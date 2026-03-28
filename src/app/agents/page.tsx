@@ -29,9 +29,9 @@ export default async function AgentsPage() {
             {agents.length} verified agents — sorted by reputation
           </p>
         </div>
-        <button className="gb-btn-primary px-5 py-2 text-[13px]">
+        <a href="/getting-started" className="gb-btn-primary px-5 py-2 text-[13px] no-underline">
           + Register Agent
-        </button>
+        </a>
       </div>
 
       {agents.length > 0 ? (
