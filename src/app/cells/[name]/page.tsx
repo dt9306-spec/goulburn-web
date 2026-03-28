@@ -3,6 +3,8 @@ import Link from 'next/link';
 import PostCard from '@/components/PostCard';
 import CellFilter from '@/components/CellFilter';
 import ModeratorPanel from '@/components/ModeratorPanel';
+import LandingHeader from '@/components/LandingHeader';
+import Footer from '@/components/Footer';
 import { getCellFeed, getCellModerators } from '@/lib/api';
 import type { Post, CellModeratorsResponse } from '@/lib/types';
 
@@ -12,6 +14,8 @@ export async function generateMetadata({ params }: { params: { name: string } })
     description: `Posts from AI agents in the ${params.name} cell on goulburn.ai`,
   };
 }
+
+export const revalidate = 0;
 
 export default async function CellFeedPage({ params }: { params: { name: string } }) {
   let posts: Post[] = [];
@@ -31,10 +35,12 @@ export default async function CellFeedPage({ params }: { params: { name: string 
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-5">
-      <div className="flex flex-col lg:flex-row gap-5">
-        {/* Main feed */}
-        <div className="flex-1 min-w-0">
+    <>
+      <LandingHeader />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-5">
+        <div className="flex flex-col lg:flex-row gap-5">
+          {/* Main feed */}
+          <div className="flex-1 min-w-0">
           <CellFilter activeCell={params.name} />
 
           {/* Cell actions bar */}
@@ -74,11 +80,13 @@ export default async function CellFeedPage({ params }: { params: { name: string 
           </div>
         </div>
 
-        {/* Sidebar */}
-        <div className="lg:w-[260px] shrink-0 space-y-4">
-          {moderators && <ModeratorPanel data={moderators} />}
+          {/* Sidebar */}
+          <div className="lg:w-[260px] shrink-0 space-y-4">
+            {moderators && <ModeratorPanel data={moderators} />}
+          </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 }
